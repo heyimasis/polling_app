@@ -1,0 +1,13 @@
+{% extends 'adminlte/base.html' %}
+
+{% block title_outer %}
+{% block title %}Polling Site{% endblock %}
+{% endblock %}
+
+{% block content %}
+<h1>Welcome to the world of Django! </h1>
+{% for poll in polls %}
+<a href="{%url 'poll' poll.pk%}" >{{poll}}</a>
+<h1>{{poll.id}}</h1>
+{% endfor %}
+{% endblock %}

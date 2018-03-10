@@ -1,34 +1,32 @@
 {% extends "poll/base.html" %}
 
-{% load i18n %}
-
-{% block poll_script %}
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
-
-
-
-{% endblock %}
 
 {% block poll_content %}
 <div class="poll_style">
-    <form method="GET" action="." id="poll_form">
+    <form method="POST" action="{% url "poll_result"  %}" id="poll_form">
         <p class="title">{{ poll.title }}</p>
+        {% csrf_token %}
+        <input type="hidden" name="poll" value="{{ poll.id }}">
         <ul>
             {% for i in items %}
             <li><input type="radio" name="item" id="item_{{ i.id }}" value="{{ i.id }}" />
                 <label for="item_{{ i.id }}">{{ i.value }}</label></li>
             {% endfor %}
         </ul>
-        <p class="poll_send"><input type="button" id="poll_send" value="{% trans 'Vote' %}" /></p>
+        <p class="poll_send"><input type="submit" id="poll_send" value="Vote" /></p>
     </form>
 </div>
+{% endblock %}
 
-<script type="text/javascript">
+
+
+{% block poll_script %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<!-- <script type="text/javascript">
 var vote_url = '{% url "poll_ajax_vote" poll.pk %}';
-var result_url = '{% url "poll_result" poll.pk %}';
-//$(document).ready(function(){
+$(document).ready(function(){
 document.addEventListener('DOMContentLoaded', function(){
     function showResults() {
         $.get(result_url, function(data) {
@@ -46,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function(){
         });
         return false;
 });
-</script>
 
+</script>
+ -->
 {% endblock %}

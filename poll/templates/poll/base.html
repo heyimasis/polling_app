@@ -1,16 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
 {% load i18n %}
 {% load staticfiles %}
-
-{% block poll_script %}
-	
-{% endblock %}
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
-
 <div id="poll_container">
 	<h2>{% trans 'poll' %}</h2>
 	{% block poll_content %}
 		
 	{% endblock %}
 </div>
+</body>
+{% block poll_script %}
+	
+{% endblock %}
+</html>
+

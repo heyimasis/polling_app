@@ -6,7 +6,7 @@ from django.template import RequestContext
 
 from .utils import set_cookie
 from .models import Poll, Item, Vote
-
+from pprint import pprint
 
 def vote(request, poll_pk):
     if request.is_ajax():
@@ -46,6 +46,8 @@ def vote(request, poll_pk):
 def poll(request, poll_pk):
     try:
         poll = Poll.objects.get(pk=poll_pk)
+
+        pprint(poll)
     except Poll.DoesNotExists:
         return HttpResponse('Wrong parameters', status=400)
 
@@ -57,12 +59,29 @@ def poll(request, poll_pk):
     })
 
 
-def result(request, poll_pk):
+def result(request):
+    item_pk = request.POST.get("item")
+    pk_pk = request.POST.get("poll")
     try:
-        poll = Poll.objects.get(pk=poll_pk)
+        poll = Poll.objects.get(pk=pk_pk)
     except Poll.DoesNotExists:
         return HttpResponse('Wrong parameters', status=400)
 
+    try:
+            item = Item.objects.get(pk=item_pk)
+    except:
+            return HttpResponse('Wrong parameters', status=400)
+    if request.user.is_authenticated():
+            user = request.user
+    else:
+            user = None
+    Vote.objects.create(
+            poll=poll,
+            ip=request.META['REMOTE_ADDR'],
+            user=user,
+            item=item,
+    )
+   
     items = Item.objects.filter(poll=poll)
 
     return render(request, "poll/result.html", {
